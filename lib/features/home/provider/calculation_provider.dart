@@ -47,6 +47,10 @@ class CalculationProvider with ChangeNotifier {
 
     error = "";
 
+    if(operand1.isNotEmpty && operand2.isNotEmpty) {
+      calculate();
+    }
+
     switch (operator) {
       case "+":
         this.operator = Operator.add;
@@ -81,12 +85,11 @@ class CalculationProvider with ChangeNotifier {
     double? second = double.tryParse(operand1);
     double? first = double.tryParse(operand2);
 
+    print(first);
+    print(second);
+
     if (first == null || second == null) {
-      // clearing data
-      stack = [];
-      operand1 = "";
-      operator = null;
-      operand2 = "";
+      clearData();
       getLetters();
       return;
     }
@@ -101,6 +104,12 @@ class CalculationProvider with ChangeNotifier {
       case Operator.mul:
         res = first * second;
       case Operator.div:
+        if(second == 0) {
+          clearData();
+          operand1 = "Nan";
+          notifyListeners();
+          return;
+        }
         res = first / second;
       case Operator.mod:
         res = first % second;
@@ -122,12 +131,18 @@ class CalculationProvider with ChangeNotifier {
 
 
     // clearing data
-    stack = [];
+    clearData();
     stack.add(formattedRes);
-    operator = null;
-    operand2 = "";
     getLetters();
 
+  }
+
+  void clearData() {
+    stack = [];
+    error = "";
+    operator = null;
+    operand2 = "";
+    operand1 = "";
   }
 
   void clearLast() {

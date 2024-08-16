@@ -50,6 +50,7 @@ class HomePage extends StatelessWidget {
                         color: AppPallete.errorColor,
                       ),
                 ),
+              const Divider(),
               const SizedBox(
                 height: 10,
               ),
